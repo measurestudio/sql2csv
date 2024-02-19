@@ -7,8 +7,7 @@ from os.path import expanduser
 import json
 
 import argparse
-import pymysql.cursors
-import pymysql.constants.CLIENT
+import mysql.connector
 import psycopg2.extras
 import psycopg2
 
@@ -18,13 +17,12 @@ file_ = None
 def get_mysql_connection(host, user, port, password, database):
     """ MySQL connection """
 
-    return pymysql.connect(host=host,
+    return mysql.connector.connect(host=host,
                            user=user,
                            port=port,
                            password=password,
                            db=database,
                            charset='utf8mb4',
-                           client_flag=pymysql.constants.CLIENT.MULTI_STATEMENTS
                            )
 
 
@@ -66,8 +64,13 @@ def execute_query(cursor, query):
 def fetch_rows(cursor):
     """ Fetch and yield rows """
 
-    for row in cursor.fetchall():
-        yield row
+    while True:
+        rows = cursor.fetchmany(10000)
+        if not rows:
+            break
+
+        for row in rows:
+            yield row
 
 
 def fetch_headers(cursor):
@@ -253,6 +256,7 @@ def query_to_csv(engine, host, user, port, password, database, query, headers=Fa
             row = stringify_items(row)
 
             writer.writerow(row)
+            file_.flush()
 
         if out_type == 'file':
             print('  ...done')
