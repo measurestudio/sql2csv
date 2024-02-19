@@ -258,6 +258,7 @@ def query_to_csv(engine, host, user, port, password, database, query, headers=Fa
             row = stringify_items(row)
 
             writer.writerow(row)
+            file_.flush()
 
         if out_type == 'file':
             print('  ...done')
