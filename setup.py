@@ -13,7 +13,7 @@ setup(
     license='MIT',
     packages=['sql2csv'],
     package_dir={'sql2csv': 'src'},
-    install_requires=['argparse', 'PyYAML', 'pymysql',
+    install_requires=['argparse', 'PyYAML', 'mysql-connector-python',
                       'psycopg2-binary'],  # external dependencies
     entry_points={
         'console_scripts': [

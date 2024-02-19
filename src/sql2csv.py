@@ -7,8 +7,7 @@ from os.path import expanduser
 import json
 
 import argparse
-import pymysql.cursors
-import pymysql.constants.CLIENT
+import mysql.connector
 import psycopg2.extras
 import psycopg2
 
@@ -18,13 +17,12 @@ file_ = None
 def get_mysql_connection(host, user, port, password, database):
     """ MySQL connection """
 
-    return pymysql.connect(host=host,
+    return mysql.connector.connect(host=host,
                            user=user,
                            port=port,
                            password=password,
                            db=database,
                            charset='utf8mb4',
-                           client_flag=pymysql.constants.CLIENT.MULTI_STATEMENTS
                            )
 
 
